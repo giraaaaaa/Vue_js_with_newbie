@@ -30,14 +30,20 @@ export default {
       previous: null,
       current: '',
       operator: null,
-      operatorClicked: false
+      operatorClicked: false,
     }
   },
   methods: {
     clear() {
       this.current = '';
     },
-    
+    sign() {
+      this.current = this.current.charAt(0) === '-' ? 
+        this.current.slice(1) : `-${this.current}`;
+    },
+    percent() {
+      this.current = `${parseFloat(this.current) / 100}`;
+    },
     append(number) {
       if (this.operatorClicked) {
         this.current = '';
@@ -45,7 +51,11 @@ export default {
       }
       this.current = `${this.current}${number}`;
     },
-   
+    dot() {
+      if (this.current.indexOf('.') === -1) {
+        this.append('.');
+      }
+    },
     setPrevious() {
       this.previous = this.current;
       this.operatorClicked = true;
@@ -68,8 +78,8 @@ export default {
     },
     equal() {
       this.current = `${this.operator(
-        parseFloat(this.previous), 
-        parseFloat(this.current)
+        parseFloat(this.current), 
+        parseFloat(this.previous)
       )}`;
       console.log('결과 : '+this.current)
       this.previous = null;
